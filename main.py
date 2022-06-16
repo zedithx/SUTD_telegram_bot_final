@@ -41,7 +41,7 @@ async def choice(update: Update,  _: CallbackContext):
     user = update.message.from_user
     logger.info(f"{user.first_name} chose {update.message.text}")
     if update.message.text.lower() == 'no':
-        update.message.reply_text(
+        await update.message.reply_text(
             "Then u type /start for what bij?!!!", reply_markup=ReplyKeyboardRemove()
         )
         return ConversationHandler.END
