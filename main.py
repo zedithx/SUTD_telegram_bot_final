@@ -25,7 +25,7 @@ async def start(update: Update, _: CallbackContext) -> int:
     """Starts the conversation and asks what does user want to do."""
     reply_keyboard = [["Yes", "No"]]
 
-    update.message.reply_text(
+    await update.message.reply_text(
         "Hallo! I'm here to assist u with giving points to Si Jun! "
         "Send /cancel to stop talking to me.\n\n"
         "Would u like to add friendship points for Si Jun???!!!",
@@ -46,7 +46,7 @@ async def choice(update: Update,  _: CallbackContext):
         )
         return ConversationHandler.END
     else:
-        update.message.reply_text(
+        await update.message.reply_text(
             "How many points should Mr Yang get today?!!!",
             reply_markup=ReplyKeyboardMarkup(
                 reply_keyboard, one_time_keyboard=True, input_field_placeholder="How many points?"
@@ -61,7 +61,7 @@ async def points(update: Update,  _: CallbackContext):
     logger.info(f"{user.first_name} has given {update.message.text} points")
     global track_points
     track_points += int(update.message.text)
-    update.message.reply_text(
+    await update.message.reply_text(
         f"Jun now has {track_points} points. FKS"
     )
     return ConversationHandler.END
@@ -70,7 +70,7 @@ async def cancel(update: Update,  _: CallbackContext) -> int:
     """Cancels and ends the conversation."""
     user = update.message.from_user
     logger.info("User %s canceled the conversation.", user.first_name)
-    update.message.reply_text(
+    await update.message.reply_text(
         "I guess Si Jun doesn't deserve points today:<", reply_markup=ReplyKeyboardRemove()
     )
 
