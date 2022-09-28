@@ -1,7 +1,8 @@
 import logging
+from functools import wraps
 
 import telegram
-from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove, ChatAction
 from telegram.ext import CommandHandler, ConversationHandler, MessageHandler, \
     Updater, Filters
 from telegram import __version__ as TG_VER
@@ -21,7 +22,16 @@ CHOICE, POINTS, SET_GOAL, PLANS, ANSWER = range(5)
 track_points = 40400
 goal = 100000
 
-async def start(update: Update, CallbackContext) -> int:
+# Show that bot it "TYPING"
+def send_typing_action(func):
+    @wraps(func)
+    def command_func(update, context, *args, **kwargs):
+        context.bot.send_chat_action(chat_id=update.effective_message.chat_id, action=ChatAction.TYPING)
+        return func(update, context,  *args, **kwargs)
+
+    return command_func
+@send_typing_action
+def start(update: Update, CallbackContext):
     """Starts the conversation and asks what does user want to do."""
     reply_keyboard = [["Yes", "No"]]
 
@@ -34,8 +44,8 @@ async def start(update: Update, CallbackContext) -> int:
         ),
     )
     return CHOICE
-
-async def affection(update: Update, CallbackContext) -> int:
+@send_typing_action
+def affection(update: Update, CallbackContext):
     """Ask whether affection is needed"""
     reply_keyboard = [["Yes", "No"]]
 
@@ -47,8 +57,8 @@ async def affection(update: Update, CallbackContext) -> int:
         ),
     )
     return ANSWER
-
-async def affection_message(update: Update, CallbackContext) -> int:
+@send_typing_action
+def affection_message(update: Update, CallbackContext):
     """Shows photos and affection"""
     user = update.message.from_user
     logger.info(f"{user.first_name} has chosen the affection option")
@@ -67,7 +77,8 @@ async def affection_message(update: Update, CallbackContext) -> int:
 
 
 """Progress choice"""
-async def progress(update:Update, CallbackContext) -> int:
+@send_typing_action
+def progress(update:Update, CallbackContext):
     "returns progress of friendship points"
     user = update.message.from_user
     ratio = int(track_points/goal*10)
@@ -81,7 +92,8 @@ async def progress(update:Update, CallbackContext) -> int:
     return ConversationHandler.END
 
 """Set Goal choice"""
-async def choose_goal(update: Update,  CallbackContext):
+@send_typing_action
+def choose_goal(update: Update,  CallbackContext):
 
     "Add points based on reply"
     global goal
@@ -90,7 +102,8 @@ async def choose_goal(update: Update,  CallbackContext):
     )
     return SET_GOAL
 
-async def set_goal(update: Update, CallbackContext):
+@send_typing_action
+def set_goal(update: Update, CallbackContext):
     "Add points based on reply"
     user = update.message.from_user
     logger.info(f"{user.first_name} has set the goal to be {update.message.text} points")
@@ -106,8 +119,10 @@ async def set_goal(update: Update, CallbackContext):
     )
     return ConversationHandler.END
 
+
 """Set Plans Choice"""
-async def set_plans(update: Update, CallbackContext):
+@send_typing_action
+def set_plans(update: Update, CallbackContext):
     """Set plans and notify Si Jun"""
     reply_keyboard = [["Mon", "Tues", "Wed", "Thurs", "Fri", "Saturday", "Sunday"]]
     user = update.message.from_user
@@ -120,8 +135,8 @@ async def set_plans(update: Update, CallbackContext):
         ),
     )
     return PLANS
-
-async def confirm_plans(update: Update, CallbackContext):
+@send_typing_action
+def confirm_plans(update: Update, CallbackContext):
     """Check if plans are available"""
     user = update.message.from_user
     if update.message.text.lower() == 'wed' or update.message.text.lower() == 'thurs':
@@ -135,7 +150,8 @@ async def confirm_plans(update: Update, CallbackContext):
         )
     return ConversationHandler.END
 
-async def choice(update: Update,  CallbackContext):
+@send_typing_action
+def choice(update: Update,  CallbackContext):
     "Based on Choice, exit programme or gets points inputted"
     reply_keyboard = [["400", "800", "1200", "1600", "2000", "5000"]]
     user = update.message.from_user
@@ -153,8 +169,8 @@ async def choice(update: Update,  CallbackContext):
             ),
         )
     return POINTS
-
-async def points(update: Update, CallbackContext):
+@send_typing_action
+def points(update: Update, CallbackContext):
 
     "Add points based on reply"
     user = update.message.from_user
@@ -166,7 +182,7 @@ async def points(update: Update, CallbackContext):
     )
     return ConversationHandler.END
 
-async def cancel(update: Update, CallbackContext) -> int:
+def cancel(update: Update, CallbackContext):
     """Cancels and ends the conversation."""
     user = update.message.from_user
     logger.info("User %s canceled the conversation.", user.first_name)
