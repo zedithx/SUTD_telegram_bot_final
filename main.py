@@ -18,6 +18,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 TOKEN = '5494892715:AAEieqoP3Ga4rJnwmopCeb3IXolWqvXPYjc'
+bot = telegram.Bot(token=TOKEN)
 CHOICE, POINTS, SET_GOAL, PLANS, ANSWER = range(5)
 track_points = 40400
 goal = 100000
@@ -197,8 +198,6 @@ def cancel(update: Update, _: CallbackContext):
 
 
 if __name__ == '__main__':
-    global bot
-    bot = telegram.Bot(token=TOKEN)
     updater = Updater(TOKEN, use_context=True)
     # application = ApplicationBuilder().token('5494892715:AAEieqoP3Ga4rJnwmopCeb3IXolWqvXPYjc').build()
     dispatcher = updater.dispatcher
