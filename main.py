@@ -234,5 +234,3 @@ if __name__ == '__main__':
                           port=PORT,
                           url_path=TOKEN,
                           webhook_url= 'https://afternoon-brook-87795.herokuapp.com/' + TOKEN)
-
-    updater.idle()
