@@ -247,10 +247,10 @@ if __name__ == '__main__':
     dispatcher.add_handler(affection_conv_handler)
     print('check')
 
-    updater.start_webhook(listen="0.0.0.0",
+    test = updater.start_webhook(listen="0.0.0.0",
                           port=PORT,
                           url_path=TOKEN,
                           webhook_url='https://afternoon-brook-87795.herokuapp.com/' + TOKEN)
 
+    print(test)
     updater.idle()
-    print('check')
