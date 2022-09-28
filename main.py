@@ -2,23 +2,13 @@ import logging
 
 import telegram
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
-from telegram.ext import ApplicationBuilder, CommandHandler, ConversationHandler, MessageHandler, filters, ContextTypes
+from telegram.ext import CommandHandler, ConversationHandler, MessageHandler, \
+    Updater, Filters
 from telegram import __version__ as TG_VER
 
 import os
 PORT = int(os.environ.get('PORT', 5000))
 
-try:
-    from telegram import __version_info__
-except ImportError:
-    __version_info__ = (0, 0, 0, 0, 0)  # type: ignore[assignment]
-
-if __version_info__ < (20, 0, 0, "alpha", 1):
-    raise RuntimeError(
-        f"This example is not compatible with your current PTB version {TG_VER}. To view the "
-        f"{TG_VER} version of this example, "
-        f"visit https://docs.python-telegram-bot.org/en/v{TG_VER}/examples.html"
-    )
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
@@ -26,12 +16,12 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+TOKEN = '5494892715:AAEieqoP3Ga4rJnwmopCeb3IXolWqvXPYjc'
 CHOICE, POINTS, SET_GOAL, PLANS, ANSWER = range(5)
 track_points = 40400
 goal = 100000
-bot = telegram.Bot(token='5494892715:AAEieqoP3Ga4rJnwmopCeb3IXolWqvXPYjc')
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+async def start(update: Update, CallbackContext) -> int:
     """Starts the conversation and asks what does user want to do."""
     reply_keyboard = [["Yes", "No"]]
 
@@ -45,7 +35,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     )
     return CHOICE
 
-async def affection(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+async def affection(update: Update, CallbackContext) -> int:
     """Ask whether affection is needed"""
     reply_keyboard = [["Yes", "No"]]
 
@@ -58,7 +48,7 @@ async def affection(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     )
     return ANSWER
 
-async def affection_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+async def affection_message(update: Update, CallbackContext) -> int:
     """Shows photos and affection"""
     user = update.message.from_user
     logger.info(f"{user.first_name} has chosen the affection option")
@@ -77,7 +67,7 @@ async def affection_message(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
 
 """Progress choice"""
-async def progress(update:Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+async def progress(update:Update, CallbackContext) -> int:
     "returns progress of friendship points"
     user = update.message.from_user
     ratio = int(track_points/goal*10)
@@ -91,7 +81,7 @@ async def progress(update:Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     return ConversationHandler.END
 
 """Set Goal choice"""
-async def choose_goal(update: Update,  context: ContextTypes.DEFAULT_TYPE):
+async def choose_goal(update: Update,  CallbackContext):
 
     "Add points based on reply"
     global goal
@@ -100,7 +90,7 @@ async def choose_goal(update: Update,  context: ContextTypes.DEFAULT_TYPE):
     )
     return SET_GOAL
 
-async def set_goal(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def set_goal(update: Update, CallbackContext):
     "Add points based on reply"
     user = update.message.from_user
     logger.info(f"{user.first_name} has set the goal to be {update.message.text} points")
@@ -117,7 +107,7 @@ async def set_goal(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 """Set Plans Choice"""
-async def set_plans(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def set_plans(update: Update, CallbackContext):
     """Set plans and notify Si Jun"""
     reply_keyboard = [["Mon", "Tues", "Wed", "Thurs", "Fri", "Saturday", "Sunday"]]
     user = update.message.from_user
@@ -131,7 +121,7 @@ async def set_plans(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     return PLANS
 
-async def confirm_plans(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def confirm_plans(update: Update, CallbackContext):
     """Check if plans are available"""
     user = update.message.from_user
     if update.message.text.lower() == 'wed' or update.message.text.lower() == 'thurs':
@@ -145,7 +135,7 @@ async def confirm_plans(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
     return ConversationHandler.END
 
-async def choice(update: Update,  context: ContextTypes.DEFAULT_TYPE):
+async def choice(update: Update,  CallbackContext):
     "Based on Choice, exit programme or gets points inputted"
     reply_keyboard = [["400", "800", "1200", "1600", "2000", "5000"]]
     user = update.message.from_user
@@ -164,7 +154,7 @@ async def choice(update: Update,  context: ContextTypes.DEFAULT_TYPE):
         )
     return POINTS
 
-async def points(update: Update,  context: ContextTypes.DEFAULT_TYPE):
+async def points(update: Update, CallbackContext):
 
     "Add points based on reply"
     user = update.message.from_user
@@ -176,7 +166,7 @@ async def points(update: Update,  context: ContextTypes.DEFAULT_TYPE):
     )
     return ConversationHandler.END
 
-async def cancel(update: Update,  context: ContextTypes.DEFAULT_TYPE) -> int:
+async def cancel(update: Update, CallbackContext) -> int:
     """Cancels and ends the conversation."""
     user = update.message.from_user
     logger.info("User %s canceled the conversation.", user.first_name)
@@ -189,13 +179,17 @@ async def cancel(update: Update,  context: ContextTypes.DEFAULT_TYPE) -> int:
 
 
 if __name__ == '__main__':
-    application = ApplicationBuilder().token('5494892715:AAEieqoP3Ga4rJnwmopCeb3IXolWqvXPYjc').build()
+    bot = telegram.Bot(token=TOKEN)
+    updater = Updater(TOKEN, use_context=True)
+    # application = ApplicationBuilder().token('5494892715:AAEieqoP3Ga4rJnwmopCeb3IXolWqvXPYjc').build()
+    dispatcher = updater.dispatcher
+
 
     start_conv_handler = ConversationHandler(
         entry_points=[CommandHandler("start", start)],
         states={
-            CHOICE: [MessageHandler(filters.Regex("^(?:Yes|No)$"), choice)],
-            POINTS: [MessageHandler(filters.Regex("^400|800|1200|1600|2000|5000$"), points)]
+            CHOICE: [MessageHandler(Filters.regex("^(?:Yes|No)$"), choice)],
+            POINTS: [MessageHandler(Filters.regex("^400|800|1200|1600|2000|5000$"), points)]
         },
         fallbacks=[CommandHandler("cancel", cancel)],
     )
@@ -203,7 +197,7 @@ if __name__ == '__main__':
     goal_conv_handler = ConversationHandler(
         entry_points=[CommandHandler("goal", choose_goal)],
         states={
-            SET_GOAL: [MessageHandler(filters.Regex("(.*?)"), set_goal)],
+            SET_GOAL: [MessageHandler(Filters.regex("(.*?)"), set_goal)],
         },
         fallbacks=[CommandHandler("cancel", cancel)],
     )
@@ -211,7 +205,7 @@ if __name__ == '__main__':
     affection_conv_handler = ConversationHandler(
         entry_points=[CommandHandler("affection", affection)],
         states={
-            ANSWER: [MessageHandler(filters.Regex("^(?:Yes|No)$"), affection_message)],
+            ANSWER: [MessageHandler(Filters.regex("^(?:Yes|No)$"), affection_message)],
         },
         fallbacks=[CommandHandler("cancel", cancel)],
     )
@@ -225,15 +219,20 @@ if __name__ == '__main__':
     plans_conv_handler = ConversationHandler(
         entry_points=[CommandHandler("plan", set_plans)],
         states={
-            PLANS: [MessageHandler(filters.Regex("^(?:Mon|Tues|Wed|Thurs|Fri|Sat|Sun)$"), confirm_plans)]
+            PLANS: [MessageHandler(Filters.regex("^(?:Mon|Tues|Wed|Thurs|Fri|Sat|Sun)$"), confirm_plans)]
         },
         fallbacks=[CommandHandler("cancel", cancel)],
     )
 
-    application.add_handler(start_conv_handler)
-    application.add_handler(progress_conv_handler)
-    application.add_handler(goal_conv_handler)
-    application.add_handler(plans_conv_handler)
-    application.add_handler(affection_conv_handler)
+    dispatcher.add_handler(start_conv_handler)
+    dispatcher.add_handler(progress_conv_handler)
+    dispatcher.add_handler(goal_conv_handler)
+    dispatcher.add_handler(plans_conv_handler)
+    dispatcher.add_handler(affection_conv_handler)
 
-    application.run_polling()
+    updater.start_webhook(listen="0.0.0.0",
+                          port=PORT,
+                          url_path=TOKEN,
+                          webhook_url= 'https://afternoon-brook-87795.herokuapp.com/' + TOKEN)
+
+    updater.idle()
