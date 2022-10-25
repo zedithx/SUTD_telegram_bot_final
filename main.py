@@ -63,15 +63,15 @@ def start(update: Update, _: CallbackContext):
 
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_main.jpg", 'rb'), caption=
         "Hello. Welcome to the Echo@Cove 2022 Registration Bot \n\n"
-        "Echo@Cove is an event on 18 November where we have invited DJs to mix musics with 3 different themes")
-    update.message.reply_text('These themes will be...')
-    sleep(1)
+        "Echo@Cove is an event on 18 November where we have invited DJs to mix musics with 3 different themes\n\n"
+        "These themes will be...")
+    sleep(3)
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='placeholder')
-    sleep(5)
+    sleep(3)
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='placeholder')
-    sleep(5)
+    sleep(3)
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='placeholder')
-    sleep(5)
+    sleep(3)
     update.message.reply_text(
         "We will be giving out wristbands based on the theme that u choose. \n"
         "The main goal of this event is to allow everyone to bond with each other based on the music theme they enjoy"
@@ -108,6 +108,8 @@ def name(update: Update, _: CallbackContext):
 @send_typing_action
 def student_id(update: Update, _: CallbackContext):
     """Prompt user to enter Student ID"""
+    user = update.message.from_user
+    logger.info(f"{user.first_name} has indicated entered his/her name")
     userID = str(update.message.chat_id)
     userID_database[userID].append(update.message.text)
     update.message.reply_text(
