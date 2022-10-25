@@ -207,9 +207,10 @@ if __name__ == '__main__':
     start_conv_handler = ConversationHandler(
         entry_points=[CommandHandler("start", start)],
         states={
-            NAME: [MessageHandler(Filters.text, name)],
-            STUDENT_ID: [MessageHandler(Filters.regex('^[0-9]+$'), student_id)],
-            MUSIC_THEME: [MessageHandler(Filters.regex('^[1-3]$'), music_theme)],
+            NAME: [MessageHandler(Filters.regex('(?i)^(yes|no)$'), name)],
+            STUDENT_ID: [MessageHandler(Filters.text, student_id)],
+            MUSIC_THEME: [MessageHandler(Filters.regex('^[0-9]+$'), music_theme)],
+            CONFIRMATION: [MessageHandler(Filters.regex('^[1-3]$'), confirmation)],
             SUBMIT: [MessageHandler(Filters.regex('(?i)^(yes|no)$'), submit)]
         },
         fallbacks=[CommandHandler("cancel", cancel)],
