@@ -47,12 +47,12 @@ NAME, STUDENT_ID, MUSIC_THEME, CONFIRMATION, SUBMIT = range(5)
 userID_database = {}
 musictheme_dict = {'1': "FEELIN' GOOD", '2': "2000s", '3': "HIPHOP"}
 
-def schedule_checker():
-    while True:
-        schedule.run_pending()
-        sleep(1)
+# def schedule_checker():
+#     while True:
+#         schedule.run_pending()
+#         sleep(1)
 def broadcast_message():
-    # print('check')
+    print('check')
     # if datetime.date == '2022-10-26' and datetime.time == '00:05':
     for userID in userID_database:
         bot.send_message(userID, "Have u signed up for Echo@Cove yet? We are only 3 days away from it!"
