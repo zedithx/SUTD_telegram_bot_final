@@ -1,9 +1,12 @@
+import datetime
 import logging
 import sched
 from functools import wraps
+from threading import Thread
 from time import sleep
 
 import gspread
+import schedule
 import telegram
 from apscheduler.schedulers.blocking import BlockingScheduler
 from oauth2client.service_account import ServiceAccountCredentials
@@ -42,16 +45,18 @@ bot = telegram.Bot(token=TOKEN)
 NAME, STUDENT_ID, MUSIC_THEME, CONFIRMATION, SUBMIT = range(5)
 # START --> NAME --> STUDENTID --> MUSIC THEME --> COMFIRMATION --> LOAD INTO GOOGLESHEETS --> SUBMIT
 userID_database = {}
-
 musictheme_dict = {'1': "FEELIN' GOOD", '2': "2000s", '3': "HIPHOP"}
 
-sched = BlockingScheduler()
-
+def schedule_checker():
+    while True:
+        schedule.run_pending()
+        sleep(1)
 def broadcast_message():
-    for userID in userID_database:
-        bot.sendMessage(userID, "Only 1 more day to Echo@Cove. Have u signed up already? Here are some updates to "
-                                "the event!")
-    return
+    print('check')
+    if datetime.date == '2022-10-26' and datetime.time == '00:00':
+        for userID in userID_database:
+            bot.send_message(userID, "Have u signed up for Echo@Cove yet? We are only 3 days away from it!"
+                                     "Here are the final updates for the event!")
 def send_typing_action(func):
     """Wrapper to show that bot is typing"""
     @wraps(func)
@@ -202,9 +207,11 @@ def cancel(update: Update, _: CallbackContext):
 
 
 if __name__ == '__main__':
+    schedule.every().day.at("01:00").do(broadcast_message())
+    Thread(target=schedule_checker).start()
+
     updater = Updater(TOKEN, use_context=True)
     dispatcher = updater.dispatcher
-
 
     start_conv_handler = ConversationHandler(
         entry_points=[CommandHandler("start", start)],
@@ -225,7 +232,5 @@ if __name__ == '__main__':
                                  port=PORT,
                                  url_path=TOKEN,
                                  webhook_url='https://gentle-plains-09954.herokuapp.com/' + TOKEN)
-
     updater.idle()
 
-    sched.add_job(broadcast_message, start_date='2022-10-26 00:35')
