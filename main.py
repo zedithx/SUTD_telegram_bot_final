@@ -1,9 +1,11 @@
 import logging
+import sched
 from functools import wraps
 from time import sleep
 
 import gspread
 import telegram
+from apscheduler.schedulers.blocking import BlockingScheduler
 from oauth2client.service_account import ServiceAccountCredentials
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove, ChatAction
 from telegram.ext import CommandHandler, ConversationHandler, MessageHandler, \
@@ -43,6 +45,13 @@ userID_database = {}
 
 musictheme_dict = {'1': "FEELIN' GOOD", '2': "2000s", '3': "HIPHOP"}
 
+sched = BlockingScheduler()
+
+def broadcast_message():
+    for userID in userID_database:
+        bot.sendMessage(userID, "Only 1 more day to Echo@Cove. Have u signed up already? Here are some updates to "
+                                "the event!")
+    return
 def send_typing_action(func):
     """Wrapper to show that bot is typing"""
     @wraps(func)
@@ -218,3 +227,5 @@ if __name__ == '__main__':
                                  webhook_url='https://gentle-plains-09954.herokuapp.com/' + TOKEN)
 
     updater.idle()
+
+    sched.add_job(broadcast_message, start_date='2022-10-26 00:35')
