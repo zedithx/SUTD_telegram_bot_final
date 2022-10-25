@@ -40,7 +40,6 @@ bot = telegram.Bot(token=TOKEN)
 NAME, STUDENT_ID, MUSIC_THEME, CONFIRMATION, SUBMIT = range(5)
 # START --> NAME --> STUDENTID --> MUSIC THEME --> COMFIRMATION --> LOAD INTO GOOGLESHEETS --> SUBMIT
 userID_database = {}
-userID_savedindex = {}
 
 musictheme_dict = {'1': "FEELIN' GOOD", '2': "2000s", '3': "HIPHOP"}
 
@@ -65,7 +64,7 @@ def start(update: Update, _: CallbackContext):
 
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_main.jpg", 'rb'), caption=
         "Hello. Welcome to the Echo@Cove 2022 Registration Bot \n\n"
-        "Echo@Cove is an event on 18 November where we have invited DJs to mix musics with 3 different themes\n\n"
+        "Echo@Cove is an event on 17 November where we have invited DJs to mix musics with 3 different themes\n\n"
         "These themes will be...")
     sleep(3)
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption="FEELIN' GOOD")
@@ -96,8 +95,6 @@ def name(update: Update, _: CallbackContext):
     user = update.message.from_user
     if update.message.text.lower() == 'no':
         logger.info(f"{user.first_name} has decided not to register")
-        userID = str(update.message.chat_id)
-        userID_database.pop(userID, None)
         update.message.reply_text("We hope to see you register soon!", reply_markup=ReplyKeyboardRemove())
         return ConversationHandler.END
     elif update.message.text.lower() == 'yes':
@@ -123,7 +120,6 @@ def student_id(update: Update, _: CallbackContext):
 @send_typing_action
 def music_theme(update: Update, _: CallbackContext):
     """Prompt user to choose favourite music theme"""
-    print('check')
     user = update.message.from_user
     logger.info(f"{user.first_name} has indicated entered his/her student id")
     userID = str(update.message.chat_id)
@@ -144,7 +140,6 @@ def confirmation(update: Update, _: CallbackContext):
     logger.info(f"{user.first_name} has indicated entered his/her preference for music theme")
     userID = str(update.message.chat_id)
     userID_database[userID].append(musictheme_dict[update.message.text])
-    print(userID_database[userID])
     update.message.reply_text('Please check your details before submitting.\n\n')
     update.message.reply_text(
         'Name: ' + userID_database[userID][0] + '\n'
@@ -161,7 +156,6 @@ def confirmation(update: Update, _: CallbackContext):
 def submit(update: Update, _:CallbackContext):
     """Store details in savedindex dict as well as google sheets after user has confirmed details are correct"""
     if update.message.text.lower() == 'yes':
-        print(userID_database)
         userID = str(update.message.chat_id)
         # Program to add to GOOGLE SHEETS HERE!
         Name = userID_database[userID][0]
@@ -171,14 +165,13 @@ def submit(update: Update, _:CallbackContext):
         sheet = client.open('Echo@Cove').worksheet('TrialRun')
         data = sheet.get_all_records()
         row_to_insert = [Name, StudentID, MusicTheme]
-        userID_savedindex[userID] = len(data) + 2
+        # userID_savedindex[userID] = len(data) + 2
         sheet.insert_row(row_to_insert, len(data) + 2)
         update.message.reply_text(
             'Registration completed! \n'
             'We hope you will have fun in this event!\n'
             'We will see you on the 17th of October!'
         )
-        logger.info(f"{userID_savedindex=}")
         logger.info(f"{userID_database=}")
         return ConversationHandler.END
     # if information is incorrect, remove from the database dictionary and end conversation
@@ -186,8 +179,6 @@ def submit(update: Update, _:CallbackContext):
         update.message.reply_text(
             'Registration is cancelled. \n'
             'Please start the bot again and enter the right particulars', reply_markup=ReplyKeyboardRemove())
-        userID = str(update.message.chat_id)
-        userID_database.pop(userID, None)
         return ConversationHandler.END
 @send_typing_action
 def cancel(update: Update, _: CallbackContext):
@@ -197,10 +188,6 @@ def cancel(update: Update, _: CallbackContext):
     update.message.reply_text(
         "We hope that you will eventually join this music festival!", reply_markup=ReplyKeyboardRemove()
     )
-    # remove from the database dictionary
-    userID = str(update.message.chat_id)
-    userID_database.pop(userID, None)
-
     return ConversationHandler.END
 
 
