@@ -178,6 +178,8 @@ def submit(update: Update, _:CallbackContext):
             'We hope you will have fun in this event!\n'
             'We will see you on the 17th of October!'
         )
+        logger.info(f"{userID_savedindex=}")
+        logger.info(f"{userID_database=}")
         return ConversationHandler.END
     # if information is incorrect, remove from the database dictionary and end conversation
     else:
