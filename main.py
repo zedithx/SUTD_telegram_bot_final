@@ -141,7 +141,9 @@ def confirmation(update: Update, _: CallbackContext):
     user = update.message.from_user
     logger.info(f"{user.first_name} has indicated entered his/her preference for music theme")
     userID = str(update.message.chat_id)
-    update.message.reply_text('Please check your details before submitting.\n')
+    userID_database[userID].append(update.message.text)
+    print(userID_database[userID])
+    update.message.reply_text('Please check your details before submitting.\n\n')
     update.message.reply_text(
         'Name: ' + userID_database[userID][0] + '\n'
         'Student ID: ' + userID_database[userID][1] + '\n'
