@@ -183,7 +183,7 @@ def submit(update: Update, _:CallbackContext):
     else:
         update.message.reply_text(
             'Registration is cancelled. \n'
-            'Please start the bot again and enter the right particulars')
+            'Please start the bot again and enter the right particulars', reply_markup=ReplyKeyboardRemove())
         userID = str(update.message.chat_id)
         userID_database.pop(userID, None)
         return ConversationHandler.END
