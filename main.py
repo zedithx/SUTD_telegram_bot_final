@@ -207,7 +207,7 @@ def cancel(update: Update, _: CallbackContext):
 
 
 if __name__ == '__main__':
-    schedule.every().day.at("01:00").do(broadcast_message())
+    schedule.every().day.at("01:00").do(broadcast_message)
     Thread(target=schedule_checker).start()
 
     updater = Updater(TOKEN, use_context=True)
