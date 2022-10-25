@@ -114,12 +114,14 @@ def student_id(update: Update, _: CallbackContext):
     userID_database[userID].append(update.message.text)
     update.message.reply_text(
             'Now please enter your Student ID.', reply_markup=ReplyKeyboardRemove())
+    print('check')
     return MUSIC_THEME
 
 # Get favourite music theme
 @send_typing_action
 def music_theme(update: Update, _: CallbackContext):
     """Prompt user to choose favourite music theme"""
+    print('check')
     user = update.message.from_user
     logger.info(f"{user.first_name} has indicated entered his/her student id")
     userID = str(update.message.chat_id)
