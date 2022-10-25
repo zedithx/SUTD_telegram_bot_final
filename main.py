@@ -62,16 +62,16 @@ def start(update: Update, _: CallbackContext):
     logger.info(f"{user.first_name} has started the bot")
 
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_main.jpg", 'rb'), caption=
-        "Hello. Welcome to the Echo@Cove 2022 Registration Bot \n"
-        "Echo@Cove is an event on 18 November where we have invited DJs to mix musics with 3 different themes\n"
-        "These 3 themes will be...")
+        "Hello. Welcome to the Echo@Cove 2022 Registration Bot \n\n"
+        "Echo@Cove is an event on 18 November where we have invited DJs to mix musics with 3 different themes")
+    update.message.reply_text('These themes will be...')
     sleep(1)
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='placeholder')
-    sleep(1)
+    sleep(5)
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='placeholder')
-    sleep(1)
+    sleep(5)
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='placeholder')
-    sleep(1)
+    sleep(5)
     update.message.reply_text(
         "We will be giving out wristbands based on the theme that u choose. \n"
         "The main goal of this event is to allow everyone to bond with each other based on the music theme they enjoy"
@@ -200,7 +200,7 @@ if __name__ == '__main__':
         entry_points=[CommandHandler("start", start)],
         states={
             NAME: [MessageHandler(Filters.text, name)],
-            STUDENT_ID: [MessageHandler(Filters.text, name)],
+            STUDENT_ID: [MessageHandler(Filters.text, student_id)],
             MUSIC_THEME: [MessageHandler(Filters.regex('^[1-5]$'), music_theme)],
             SUBMIT: [MessageHandler(Filters.regex('(?i)^(yes|no)$'), submit)]
         },
