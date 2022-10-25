@@ -27,7 +27,7 @@ scope = ['https://spreadsheets.google.com/feeds',
 
 path = '/'
 
-creds = ServiceAccountCredentials.from_json_keyfile_name('RootTelegramBot'+ '/creds.json', scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name('/Users/yangsijun/PycharmProjects/RootTelegramBot' + '/creds.json', scope)
 
 client = gspread.authorize(creds)
 sheet = client.open('Echo@Cove').worksheet('TrialRun')
