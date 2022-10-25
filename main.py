@@ -73,9 +73,9 @@ def start(update: Update, _: CallbackContext):
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='placeholder')
     sleep(3)
     update.message.reply_text(
-        "We will be giving out wristbands based on the theme that u choose. \n"
-        "The main goal of this event is to allow everyone to bond with each other based on the music theme they enjoy"
-        "the most out of the 3 themes"
+        "We will be giving out wristbands based on the theme that u choose. \n\n"
+        "The main goal of this event is to allow everyone to bond with each other based on the music theme they enjoy "
+        "the most out of the 3 themes \n\n"
         "Come along and sign up now to socialise with more people and just have a great time overall!"
     )
     sleep(3)
@@ -120,6 +120,8 @@ def student_id(update: Update, _: CallbackContext):
 @send_typing_action
 def music_theme(update: Update, _: CallbackContext):
     """Prompt user to choose favourite music theme"""
+    user = update.message.from_user
+    logger.info(f"{user.first_name} has indicated entered his/her student id")
     userID = str(update.message.chat_id)
     userID_database[userID].append(update.message.text)
     reply_keyboard = [['1', '2', '3']]
@@ -134,6 +136,8 @@ def music_theme(update: Update, _: CallbackContext):
 @send_typing_action
 def confirmation(update: Update, _: CallbackContext):
     """Prompt user to confirm his details after entering all his particulars"""
+    user = update.message.from_user
+    logger.info(f"{user.first_name} has indicated entered his/her preference for music theme")
     userID = str(update.message.chat_id)
     update.message.reply_text('Please check your details before submitting.\n')
     update.message.reply_text(
@@ -203,7 +207,7 @@ if __name__ == '__main__':
         states={
             NAME: [MessageHandler(Filters.text, name)],
             STUDENT_ID: [MessageHandler(Filters.text, student_id)],
-            MUSIC_THEME: [MessageHandler(Filters.regex('^[1-5]$'), music_theme)],
+            MUSIC_THEME: [MessageHandler(Filters.regex('^[1-3]$'), music_theme)],
             SUBMIT: [MessageHandler(Filters.regex('(?i)^(yes|no)$'), submit)]
         },
         fallbacks=[CommandHandler("cancel", cancel)],
