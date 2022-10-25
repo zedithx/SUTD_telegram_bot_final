@@ -92,12 +92,13 @@ def start(update: Update, _: CallbackContext):
 def name(update: Update, _: CallbackContext):
     """Prompt user to enter name"""
     user = update.message.from_user
-    if update.message.text == 'No':
+    if update.message.text.lower() == 'no':
         logger.info(f"{user.first_name} has decided not to register")
         userID = str(update.message.chat_id)
         userID_database.pop(userID, None)
+        update.message.reply_text("We hope to see you register soon!", reply_markup=ReplyKeyboardRemove())
         return ConversationHandler.END
-    elif update.message.text == 'Yes':
+    elif update.message.text.lower() == 'yes':
         logger.info(f"{user.first_name} has indicated interest in registering")
         update.message.reply_text(
             'Please enter your full name.', reply_markup=ReplyKeyboardRemove())
@@ -114,7 +115,6 @@ def student_id(update: Update, _: CallbackContext):
     userID_database[userID].append(update.message.text)
     update.message.reply_text(
             'Now please enter your Student ID.', reply_markup=ReplyKeyboardRemove())
-    print('check')
     return MUSIC_THEME
 
 # Get favourite music theme
@@ -208,7 +208,7 @@ if __name__ == '__main__':
         entry_points=[CommandHandler("start", start)],
         states={
             NAME: [MessageHandler(Filters.text, name)],
-            STUDENT_ID: [MessageHandler(Filters.text, student_id)],
+            STUDENT_ID: [MessageHandler(Filters.regex('^[0-9]+$'), student_id)],
             MUSIC_THEME: [MessageHandler(Filters.regex('^[1-3]$'), music_theme)],
             SUBMIT: [MessageHandler(Filters.regex('(?i)^(yes|no)$'), submit)]
         },
