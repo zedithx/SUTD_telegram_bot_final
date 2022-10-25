@@ -131,9 +131,9 @@ def music_theme(update: Update, _: CallbackContext):
     reply_keyboard = [['1', '2', '3']]
     update.message.reply_text(
         'Now please choose your favourite theme out of the 3. \n'
-        '1: placeholder \n'
-        '2: placeholder \n'
-        '3: placeholder \n',
+        "1: FEELIN' GOOD \n"
+        '2: 2000s \n'
+        '3: HIPHOP \n',
         reply_markup=ReplyKeyboardMarkup(reply_keyboard))
     return CONFIRMATION
 
@@ -174,7 +174,7 @@ def submit(update: Update, _:CallbackContext):
         userID_savedindex[userID] = len(data) + 2
         sheet.insert_row(row_to_insert, len(data) + 2)
         update.message.reply_text(
-            '<b>Registration completed!</b> \n'
+            'Registration completed! \n'
             'We hope you will have fun in this event!\n'
             'We will see you on the 17th of October!'
         )
