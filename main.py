@@ -1,5 +1,6 @@
 import logging
 from functools import wraps
+from time import sleep
 
 import gspread
 import telegram
@@ -64,15 +65,20 @@ def start(update: Update, _: CallbackContext):
         "Hello. Welcome to the Echo@Cove 2022 Registration Bot \n"
         "Echo@Cove is an event on 18 November where we have invited DJs to mix musics with 3 different themes\n"
         "These 3 themes will be...")
+    sleep(1)
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='placeholder')
+    sleep(1)
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='placeholder')
+    sleep(1)
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='placeholder')
+    sleep(1)
     update.message.reply_text(
         "We will be giving out wristbands based on the theme that u choose. \n"
         "The main goal of this event is to allow everyone to bond with each other based on the music theme they enjoy"
         "the most out of the 3 themes"
         "Come along and sign up now to socialise with more people and just have a great time overall!"
     )
+    sleep(3)
     reply_keyboard = [["Yes", "No"]]
     update.message.reply_text(
         "Would you like to register for MusicFest 2022?",
