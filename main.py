@@ -52,11 +52,11 @@ def schedule_checker():
         schedule.run_pending()
         sleep(1)
 def broadcast_message():
-    print('check')
-    if datetime.date == '2022-10-26' and datetime.time == '00:05':
-        for userID in userID_database:
-            bot.send_message(userID, "Have u signed up for Echo@Cove yet? We are only 3 days away from it!"
-                                     "Here are the final updates for the event!")
+    # print('check')
+    # if datetime.date == '2022-10-26' and datetime.time == '00:05':
+    for userID in userID_database:
+        bot.send_message(userID, "Have u signed up for Echo@Cove yet? We are only 3 days away from it!"
+                                 "Here are the final updates for the event!")
 def send_typing_action(func):
     """Wrapper to show that bot is typing"""
     @wraps(func)
@@ -207,8 +207,9 @@ def cancel(update: Update, _: CallbackContext):
 
 
 if __name__ == '__main__':
-    schedule.every().day.at("01:05").do(broadcast_message)
-    Thread(target=schedule_checker).start()
+    # schedule.every().day.at("01:05").do(broadcast_message)
+    # Thread(target=schedule_checker).start()
+    broadcast_message()
 
     updater = Updater(TOKEN, use_context=True)
     dispatcher = updater.dispatcher
