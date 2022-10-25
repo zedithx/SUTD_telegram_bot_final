@@ -42,6 +42,8 @@ NAME, STUDENT_ID, MUSIC_THEME, CONFIRMATION, SUBMIT = range(5)
 userID_database = {}
 userID_savedindex = {}
 
+musictheme_dict = {'1': "FEELIN' GOOD", '2': "2000s", '3': "HIPHOP"}
+
 def send_typing_action(func):
     """Wrapper to show that bot is typing"""
     @wraps(func)
@@ -66,11 +68,11 @@ def start(update: Update, _: CallbackContext):
         "Echo@Cove is an event on 18 November where we have invited DJs to mix musics with 3 different themes\n\n"
         "These themes will be...")
     sleep(3)
-    bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='placeholder')
+    bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption="FEELIN' GOOD")
     sleep(3)
-    bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='placeholder')
+    bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='2000s')
     sleep(3)
-    bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='placeholder')
+    bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='HIP HOP')
     sleep(3)
     update.message.reply_text(
         "We will be giving out wristbands based on the theme that u choose. \n\n"
@@ -141,13 +143,13 @@ def confirmation(update: Update, _: CallbackContext):
     user = update.message.from_user
     logger.info(f"{user.first_name} has indicated entered his/her preference for music theme")
     userID = str(update.message.chat_id)
-    userID_database[userID].append(update.message.text)
+    userID_database[userID].append(musictheme_dict[update.message.text])
     print(userID_database[userID])
     update.message.reply_text('Please check your details before submitting.\n\n')
     update.message.reply_text(
         'Name: ' + userID_database[userID][0] + '\n'
         'Student ID: ' + userID_database[userID][1] + '\n'
-        'Favourite Music Theme' + userID_database[userID][2])
+        'Favourite Music Theme: ' + userID_database[userID][2])
     reply_keyboard = [['Yes', 'No']]
     update.message.reply_text('Are the details that you entered correct? \n \n'
                               'Enter Yes or No.',
@@ -166,7 +168,7 @@ def submit(update: Update, _:CallbackContext):
         StudentID= userID_database[userID][1]
         MusicTheme = userID_database[userID][2]
         client = gspread.authorize(creds)
-        sheet = client.open('placeholder').worksheet('placeholder')
+        sheet = client.open('Echo@Cove').worksheet('TrialRun')
         data = sheet.get_all_records()
         row_to_insert = [Name, StudentID, MusicTheme]
         userID_savedindex[userID] = len(data) + 2
