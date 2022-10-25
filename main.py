@@ -212,7 +212,7 @@ if __name__ == '__main__':
         entry_points=[CommandHandler("start", start)],
         states={
             NAME: [MessageHandler(Filters.regex('(?i)^(yes|no)$'), name)],
-            STUDENT_ID: [MessageHandler(Filters.text, student_id)],
+            STUDENT_ID: [MessageHandler(Filters.regex("(.*?)"), student_id)],
             MUSIC_THEME: [MessageHandler(Filters.regex('^[0-9]+$'), music_theme)],
             CONFIRMATION: [MessageHandler(Filters.regex('^[1-3]$'), confirmation)],
             SUBMIT: [MessageHandler(Filters.regex('(?i)^(yes|no)$'), submit)]
