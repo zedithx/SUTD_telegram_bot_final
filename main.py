@@ -62,12 +62,12 @@ def start(update: Update, _: CallbackContext):
 
     update.message.reply_text(
         "Hello. Welcome to the Echo@Cove 2022 Registration Bot \n"
-        "MusicFest is an event on 18 November where we have invited DJs to mix musics with 3 different themes\n"
+        "Echo@Cove is an event on 18 November where we have invited DJs to mix musics with 3 different themes\n"
         "These 3 themes will be..."
     )
-    bot.sendPhoto(update.message.chat_id, open("file name", 'rb'), caption='placeholder')
-    bot.sendPhoto(update.message.chat_id, open("file name", 'rb'), caption='placeholder')
-    bot.sendPhoto(update.message.chat_id, open("file name", 'rb'), caption='placeholder')
+    # bot.sendPhoto(update.message.chat_id, open("file name", 'rb'), caption='placeholder')
+    # bot.sendPhoto(update.message.chat_id, open("file name", 'rb'), caption='placeholder')
+    # bot.sendPhoto(update.message.chat_id, open("file name", 'rb'), caption='placeholder')
     update.message.reply_text(
         "We will be giving out wristbands based on the theme that u choose. \n"
         "The main goal of this event is to allow everyone to bond with each other based on the music theme they enjoy"
