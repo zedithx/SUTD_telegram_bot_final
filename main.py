@@ -208,6 +208,6 @@ if __name__ == '__main__':
     test = updater.start_webhook(listen="0.0.0.0",
                                  port=PORT,
                                  url_path=TOKEN,
-                                 webhook_url='' + TOKEN)
+                                 webhook_url='https://gentle-plains-09954.herokuapp.com/' + TOKEN)
 
     updater.idle()
