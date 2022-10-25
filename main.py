@@ -44,6 +44,7 @@ bot = telegram.Bot(token=TOKEN)
 # Define no. of variables to be stored
 NAME, STUDENT_ID, MUSIC_THEME, CONFIRMATION, SUBMIT = range(5)
 # START --> NAME --> STUDENTID --> MUSIC THEME --> COMFIRMATION --> LOAD INTO GOOGLESHEETS --> SUBMIT
+
 userID_database = {}
 musictheme_dict = {'1': "FEELIN' GOOD", '2': "2000s", '3': "HIPHOP"}
 
@@ -51,12 +52,6 @@ musictheme_dict = {'1': "FEELIN' GOOD", '2': "2000s", '3': "HIPHOP"}
 #     while True:
 #         schedule.run_pending()
 #         sleep(1)
-def broadcast_message():
-    print('check')
-    # if datetime.date == '2022-10-26' and datetime.time == '00:05':
-    for userID in userID_database:
-        bot.send_message(userID, "Have u signed up for Echo@Cove yet? We are only 3 days away from it!"
-                                 "Here are the final updates for the event!")
 def send_typing_action(func):
     """Wrapper to show that bot is typing"""
     @wraps(func)
@@ -80,20 +75,20 @@ def start(update: Update, _: CallbackContext):
         "Hello. Welcome to the Echo@Cove 2022 Registration Bot \n\n"
         "Echo@Cove is an event on 17 November where we have invited DJs to mix musics with 3 different themes\n\n"
         "These themes will be...")
-    # sleep(3)
+    sleep(3)
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption="FEELIN' GOOD")
-    # sleep(3)
+    sleep(3)
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='2000s')
-    # sleep(3)
+    sleep(3)
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='HIP HOP')
-    # sleep(3)
+    sleep(3)
     update.message.reply_text(
         "We will be giving out wristbands based on the theme that u choose. \n\n"
         "The main goal of this event is to allow everyone to bond with each other based on the music theme they enjoy "
         "the most out of the 3 themes \n\n"
         "Come along and sign up now to socialise with more people and just have a great time overall!"
     )
-    # sleep(3)
+    sleep(3)
     reply_keyboard = [["Yes", "No"]]
     update.message.reply_text(
         "Would you like to register for MusicFest 2022?",
@@ -207,8 +202,6 @@ def cancel(update: Update, _: CallbackContext):
 
 
 if __name__ == '__main__':
-    # schedule.every().day.at("01:05").do(broadcast_message)
-    # Thread(target=schedule_checker).start()
 
     updater = Updater(TOKEN, use_context=True)
     dispatcher = updater.dispatcher
@@ -232,8 +225,5 @@ if __name__ == '__main__':
                                  port=PORT,
                                  url_path=TOKEN,
                                  webhook_url='https://gentle-plains-09954.herokuapp.com/' + TOKEN)
-
-    print(f'{userID_database=}')
-    broadcast_message()
     updater.idle()
 
