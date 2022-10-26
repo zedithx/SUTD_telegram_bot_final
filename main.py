@@ -43,15 +43,12 @@ TOKEN = '5631416352:AAGNTPtHwtzZi3dEpywSRDLSzD7e9vJBYVA'
 bot = telegram.Bot(token=TOKEN)
 # Define no. of variables to be stored
 NAME, STUDENT_ID, MUSIC_THEME, CONFIRMATION, SUBMIT = range(5)
-# START --> NAME --> STUDENTID --> MUSIC THEME --> COMFIRMATION --> LOAD INTO GOOGLESHEETS --> SUBMIT
+# START --> NAME --> STUDENTID --> MUSIC THEME --> CONFIRMATION --> LOAD INTO GOOGLESHEETS --> SUBMIT
 
+# store chat ids as key and inputs as values
 userID_database = {}
 musictheme_dict = {'1': "FEELIN' GOOD", '2': "2000s", '3': "HIPHOP"}
 
-# def schedule_checker():
-#     while True:
-#         schedule.run_pending()
-#         sleep(1)
 def send_typing_action(func):
     """Wrapper to show that bot is typing"""
     @wraps(func)
@@ -130,17 +127,25 @@ def student_id(update: Update, _: CallbackContext):
 def music_theme(update: Update, _: CallbackContext):
     """Prompt user to choose favourite music theme"""
     user = update.message.from_user
-    logger.info(f"{user.first_name} has indicated entered his/her student id")
-    userID = str(update.message.chat_id)
-    userID_database[userID].append(update.message.text)
-    reply_keyboard = [['1', '2', '3']]
-    update.message.reply_text(
-        'Now please choose your favourite theme out of the 3. \n'
-        "1: FEELIN' GOOD \n"
-        '2: 2000s \n'
-        '3: HIPHOP \n',
-        reply_markup=ReplyKeyboardMarkup(reply_keyboard))
-    return CONFIRMATION
+    if update.message.text.isdigit():
+        logger.info(f"{user.first_name} has indicated entered his/her student id")
+        userID = str(update.message.chat_id)
+        userID_database[userID].append(update.message.text)
+        reply_keyboard = [['1', '2', '3']]
+        update.message.reply_text(
+            'Now please choose your favourite theme out of the 3. \n'
+            "1: FEELIN' GOOD \n"
+            '2: 2000s \n'
+            '3: HIPHOP \n',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard))
+        return CONFIRMATION
+    else:
+        logger.info(f"{user.first_name} has entered an invalid student id")
+        update.message.reply_text(
+            'You did not enter a valid Student ID.\n'
+            'Please register with the right Student ID again.', reply_markup=ReplyKeyboardRemove()
+        )
+        return ConversationHandler.END
 
 @send_typing_action
 def confirmation(update: Update, _: CallbackContext):
