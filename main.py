@@ -176,7 +176,7 @@ def confirmation(update: Update, _: CallbackContext):
         'Favourite Music Theme: ' + userID_database[userID][2])
     reply_keyboard = [['Yes', 'No']]
     update.message.reply_text('Are the details that you entered correct? \n \n'
-                              'Enter Yes or No.'
+                              'Enter Yes or No.\n'
                               'Send /cancel to stop talking to me.',
                               reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
     return SUBMIT
@@ -199,8 +199,8 @@ def submit(update: Update, _:CallbackContext):
         sheet.insert_row(row_to_insert, len(data) + 2)
         update.message.reply_text(
             'Registration completed! \n'
-            'We hope you will have fun in this event!\n'
-            'Do look out for any updates nearing to the event from this telegram bot!\n'
+            'We hope you will have fun in this event!\n\n'
+            'Do look out for any updates nearing to the event from this telegram bot!\n\n'
             'We will see you on the 17th of November!'
         )
         logger.info(f"{userID_database=}")
