@@ -215,7 +215,7 @@ def cancel(update: Update, _: CallbackContext):
     user = update.message.from_user
     logger.info("User %s canceled the conversation.", user.first_name)
     update.message.reply_text(
-        "We hope that you will eventually join this music festival!", reply_markup=ReplyKeyboardRemove()
+        "We hope that you will eventually join ECHO @ Cove!", reply_markup=ReplyKeyboardRemove()
     )
     userID_database[userID].clear()
     logger.info(f"{userID_database=}")
