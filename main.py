@@ -115,7 +115,8 @@ def name(update: Update, _: CallbackContext):
     elif update.message.text.lower() == 'yes':
         logger.info(f"{user.first_name} has indicated interest in registering")
         update.message.reply_text(
-            'Please enter your full name.', reply_markup=ReplyKeyboardRemove())
+            'Please enter your full name.\n'
+            'Send /cancel to stop talking to me.', reply_markup=ReplyKeyboardRemove())
         return STUDENT_ID
 
 
@@ -128,7 +129,8 @@ def student_id(update: Update, _: CallbackContext):
     userID = str(update.message.chat_id)
     userID_database[userID].append(update.message.text)
     update.message.reply_text(
-            'Now please enter your Student ID.', reply_markup=ReplyKeyboardRemove())
+            'Now please enter your Student ID.\n'
+            'Send /cancel to stop talking to me.', reply_markup=ReplyKeyboardRemove())
     return MUSIC_THEME
 
 # Get favourite music theme
@@ -155,7 +157,8 @@ def music_theme(update: Update, _: CallbackContext):
         'Now please choose your favourite theme out of the 3. \n'
         "1: FEELIN' GOOD \n"
         '2: 2000s \n'
-        '3: HIPHOP \n',
+        '3: HIPHOP \n'
+        'Send /cancel to stop talking to me.',
         reply_markup=ReplyKeyboardMarkup(reply_keyboard))
     return CONFIRMATION
 
@@ -173,7 +176,8 @@ def confirmation(update: Update, _: CallbackContext):
         'Favourite Music Theme: ' + userID_database[userID][2])
     reply_keyboard = [['Yes', 'No']]
     update.message.reply_text('Are the details that you entered correct? \n \n'
-                              'Enter Yes or No.',
+                              'Enter Yes or No.'
+                              'Send /cancel to stop talking to me.',
                               reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
     return SUBMIT
 
