@@ -58,14 +58,21 @@ def send_typing_action(func):
 
     return command_func
 
-# Explains details of the MusicFest event and ask if they would like to register
+# Explains details of ECHO and ask if they would like to register
 @send_typing_action
 def start(update: Update, _: CallbackContext):
-    """Starts the conversation and asks whether the user would like to register for the MusicFest"""
+    """Starts the conversation and asks whether the user would like to register for Echo"""
     user = update.message.from_user
     userID = str(update.message.chat_id)
     if userID not in userID_database:
         userID_database[userID] = []
+    elif userID_database[userID]:
+        logger.info(f"{user.first_name} tried to register but is already registered in the system")
+        update.message.reply_text(
+            'You have already registered for Echo@Cove. Please contact @zedithx on telegram for support '
+            'if the details that you had entered previously was incorrect', reply_markup=ReplyKeyboardRemove()
+        )
+        return ConversationHandler.END
     logger.info(f"{user.first_name} has started the bot")
 
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_main.jpg", 'rb'), caption=
@@ -80,7 +87,7 @@ def start(update: Update, _: CallbackContext):
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='HIP HOP')
     sleep(3)
     update.message.reply_text(
-        "We will be giving out wristbands based on the theme that u choose. \n\n"
+        "We will be giving out glowsticks based on the theme that u choose. \n\n"
         "The main goal of this event is to allow everyone to bond with each other based on the music theme they enjoy "
         "the most out of the 3 themes \n\n"
         "Come along and sign up now to socialise with more people and just have a great time overall!"
@@ -88,7 +95,7 @@ def start(update: Update, _: CallbackContext):
     sleep(3)
     reply_keyboard = [["Yes", "No"]]
     update.message.reply_text(
-        "Would you like to register for MusicFest 2022?",
+        "Do you consent to the collection, use or disclosure of your personal data only for the purpose of this event?",
         reply_markup=ReplyKeyboardMarkup(
             reply_keyboard)
     )
@@ -100,8 +107,9 @@ def name(update: Update, _: CallbackContext):
     """Prompt user to enter name"""
     user = update.message.from_user
     if update.message.text.lower() == 'no':
-        logger.info(f"{user.first_name} has decided not to register")
-        update.message.reply_text("We hope to see you register soon!", reply_markup=ReplyKeyboardRemove())
+        logger.info(f"{user.first_name} has rejected the PDPA clause")
+        update.message.reply_text("Please consent to the PDPA clause to proceed with registering!",
+                                  reply_markup=ReplyKeyboardRemove())
         return ConversationHandler.END
     elif update.message.text.lower() == 'yes':
         logger.info(f"{user.first_name} has indicated interest in registering")
@@ -127,9 +135,9 @@ def student_id(update: Update, _: CallbackContext):
 def music_theme(update: Update, _: CallbackContext):
     """Prompt user to choose favourite music theme"""
     user = update.message.from_user
+    userID = str(update.message.chat_id)
     if update.message.text.isdigit():
         logger.info(f"{user.first_name} has indicated entered his/her student id")
-        userID = str(update.message.chat_id)
         userID_database[userID].append(update.message.text)
         reply_keyboard = [['1', '2', '3']]
         update.message.reply_text(
@@ -145,6 +153,7 @@ def music_theme(update: Update, _: CallbackContext):
             'You did not enter a valid Student ID.\n'
             'Please register with the right Student ID again.', reply_markup=ReplyKeyboardRemove()
         )
+        userID_database[userID].clear()
         return ConversationHandler.END
 
 @send_typing_action
@@ -169,8 +178,8 @@ def confirmation(update: Update, _: CallbackContext):
 @send_typing_action
 def submit(update: Update, _:CallbackContext):
     """Store details in savedindex dict as well as google sheets after user has confirmed details are correct"""
+    userID = str(update.message.chat_id)
     if update.message.text.lower() == 'yes':
-        userID = str(update.message.chat_id)
         # Program to add to GOOGLE SHEETS HERE!
         Name = userID_database[userID][0]
         StudentID= userID_database[userID][1]
@@ -184,7 +193,8 @@ def submit(update: Update, _:CallbackContext):
         update.message.reply_text(
             'Registration completed! \n'
             'We hope you will have fun in this event!\n'
-            'We will see you on the 17th of October!'
+            'Do look out for any updates nearing to the event from this telegram bot!\n'
+            'We will see you on the 17th of November!'
         )
         logger.info(f"{userID_database=}")
         return ConversationHandler.END
@@ -193,15 +203,18 @@ def submit(update: Update, _:CallbackContext):
         update.message.reply_text(
             'Registration is cancelled. \n'
             'Please start the bot again and enter the right particulars', reply_markup=ReplyKeyboardRemove())
+        userID_database[userID].clear()
         return ConversationHandler.END
 @send_typing_action
 def cancel(update: Update, _: CallbackContext):
     """Cancels and ends the conversation."""
+    userID = str(update.message.chat_id)
     user = update.message.from_user
     logger.info("User %s canceled the conversation.", user.first_name)
     update.message.reply_text(
         "We hope that you will eventually join this music festival!", reply_markup=ReplyKeyboardRemove()
     )
+    userID_database[userID].clear()
     return ConversationHandler.END
 
 
