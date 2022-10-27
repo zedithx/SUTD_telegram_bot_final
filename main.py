@@ -137,18 +137,9 @@ def music_theme(update: Update, _: CallbackContext):
     """Prompt user to choose favourite music theme"""
     user = update.message.from_user
     userID = str(update.message.chat_id)
-    if update.message.text.isdigit():
-        logger.info(f"{user.first_name} has indicated entered his/her student id")
-        userID_database[userID].append(update.message.text)
-        reply_keyboard = [['1', '2', '3']]
-        update.message.reply_text(
-            'Now please choose your favourite theme out of the 3. \n'
-            "1: FEELIN' GOOD \n"
-            '2: 2000s \n'
-            '3: HIPHOP \n',
-            reply_markup=ReplyKeyboardMarkup(reply_keyboard))
-        return CONFIRMATION
-    else:
+    try:
+        int(update.message.text)
+    except:
         logger.info(f"{user.first_name} has entered an invalid student id")
         update.message.reply_text(
             'You did not enter a valid Student ID.\n'
@@ -157,6 +148,16 @@ def music_theme(update: Update, _: CallbackContext):
         userID_database[userID].clear()
         logger.info(f"{userID_database=}")
         return ConversationHandler.END
+    logger.info(f"{user.first_name} has indicated entered his/her student id")
+    userID_database[userID].append(update.message.text)
+    reply_keyboard = [['1', '2', '3']]
+    update.message.reply_text(
+        'Now please choose your favourite theme out of the 3. \n'
+        "1: FEELIN' GOOD \n"
+        '2: 2000s \n'
+        '3: HIPHOP \n',
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard))
+    return CONFIRMATION
 
 @send_typing_action
 def confirmation(update: Update, _: CallbackContext):
