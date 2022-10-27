@@ -110,6 +110,7 @@ def name(update: Update, _: CallbackContext):
         logger.info(f"{user.first_name} has rejected the PDPA clause")
         update.message.reply_text("Please consent to the PDPA clause to proceed with registering!",
                                   reply_markup=ReplyKeyboardRemove())
+        logger.info(f"{userID_database=}")
         return ConversationHandler.END
     elif update.message.text.lower() == 'yes':
         logger.info(f"{user.first_name} has indicated interest in registering")
@@ -154,6 +155,7 @@ def music_theme(update: Update, _: CallbackContext):
             'Please register with the right Student ID again.', reply_markup=ReplyKeyboardRemove()
         )
         userID_database[userID].clear()
+        logger.info(f"{userID_database=}")
         return ConversationHandler.END
 
 @send_typing_action
@@ -204,6 +206,7 @@ def submit(update: Update, _:CallbackContext):
             'Registration is cancelled. \n'
             'Please start the bot again and enter the right particulars', reply_markup=ReplyKeyboardRemove())
         userID_database[userID].clear()
+        logger.info(f"{userID_database=}")
         return ConversationHandler.END
 @send_typing_action
 def cancel(update: Update, _: CallbackContext):
@@ -215,6 +218,7 @@ def cancel(update: Update, _: CallbackContext):
         "We hope that you will eventually join this music festival!", reply_markup=ReplyKeyboardRemove()
     )
     userID_database[userID].clear()
+    logger.info(f"{userID_database=}")
     return ConversationHandler.END
 
 
