@@ -113,8 +113,7 @@ def registration(update: Update, _: CallbackContext):
         logger.info(f"{user.first_name} has indicated interest in registering")
         update.message.reply_text("Please use this link to register.\n\n"
                                   "https://forms.office.com/Pages/ResponsePage.aspx?id=drd2NJDpck-5UGJImDFiPU3EhgakLqhLqm4w1ZT_H25UOUNZR0NEREZEN1FGVEg5RUZOSVNDM0czOC4u \n\n"
-                                  "After u have registered, please click registered"
-                                  "to proceed.\n\n"
+                                  "After u have registered, please click registered to proceed.\n\n"
                                   "Type /cancel to stop talking to me.", reply_markup=ReplyKeyboardMarkup(reply_keyboard))
         return CONFIRMATION
 
@@ -130,7 +129,8 @@ def confirmation(update: Update, _: CallbackContext):
             'The DJs may then play your favourite song on the day itself!\n\n'
             'Do look out for any updates nearing to the event from this telegram bot as information'
             'will be disseminated through here!\n\n'
-            'We will see you on the 17th of November!'
+            'We will see you on the 17th of November!',
+            reply_markup=ReplyKeyboardRemove()
         )
         logger.info(f"{userID_database=}")
         return ConversationHandler.END
@@ -161,7 +161,8 @@ def theme(update: Update, _: CallbackContext):
     logger.info(f'{user.first_name} has chosen to add songs for {musictheme_dict[f"{update.message.text}"]}')
     update.message.reply_text(
         f"Please use this link to add songs for {musictheme_dict[f'{update.message.text}']} \n\n"
-        f"{spotifylink_dict[f'{update.message.text}']}"
+        f"{spotifylink_dict[f'{update.message.text}']}",
+        reply_markup=ReplyKeyboardRemove()
     )
     return ConversationHandler.END
 
