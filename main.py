@@ -135,7 +135,7 @@ def confirmation(update: Update, _: CallbackContext):
             'We hope you will have fun in this event!\n\n'
             'You can add your favourite songs to our spotify playlist by using /song. '
             'The DJs may then play your favourite song on the day itself!\n\n'
-            'Do look out for any updates nearing to the event from this telegram bot as information'
+            'Do look out for any updates nearing to the event from this telegram bot as information '
             'will be disseminated through here!\n\n'
             'We will see you on the 17th of November!',
             reply_markup=ReplyKeyboardRemove()
