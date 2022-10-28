@@ -45,8 +45,12 @@ bot = telegram.Bot(token=TOKEN)
 REGISTRATION, CONFIRMATION, THEME = range(3)
 # START --> NAME --> STUDENTID --> MUSIC THEME --> CONFIRMATION --> LOAD INTO GOOGLESHEETS --> SUBMIT
 
-# store chat ids as key and inputs as values
-userID_database = {}
+# store chat ids of everyone who used the bot
+userID_database = []
+# store chat ids of everyone who actually went through with registering
+userID_registered = []
+
+# static dictionaries to be managed
 musictheme_dict = {'1': "FEELIN' GOOD", '2': "2000s", '3': "HIPHOP"}
 spotifylink_dict = {'1': "https://open.spotify.com/playlist/6azPbOPc3UAgRFNeRa4uSY?si=c4381db8a24f4ce6&pt=f1c4059844e4d4e32fff96cf4fea6c5c",
                     '2': "https://open.spotify.com/playlist/3getgDZOuHhjSgDjjIck7g?si=bbcde49dedba4e2e&pt=fe57b58d32be872cdfd670d7a328e74f",
@@ -68,7 +72,7 @@ def start(update: Update, _: CallbackContext):
     user = update.message.from_user
     userID = str(update.message.chat_id)
     if userID not in userID_database:
-        userID_database[userID] = []
+        userID_database.append(userID)
     logger.info(f"{user.first_name} has started the bot")
 
     bot.sendPhoto(update.message.chat_id, open("Images/Echo_main.jpg", 'rb'), caption=
@@ -107,6 +111,7 @@ def registration(update: Update, _: CallbackContext):
         update.message.reply_text("Please consent to the PDPA clause to proceed with registering!",
                                   reply_markup=ReplyKeyboardRemove())
         logger.info(f"{userID_database=}")
+        logger.info(f"{userID_registered=}")
         return ConversationHandler.END
     else:
         reply_keyboard = [['registered', 'changed my mind']]
@@ -121,7 +126,10 @@ def registration(update: Update, _: CallbackContext):
 def confirmation(update: Update, _: CallbackContext):
     "Concludes registration"
     user = update.message.from_user
+    userID = str(update.message.chat_id)
     if update.message.text.lower() == 'registered':
+
+        logger.info(f'{user.first_name} has registered for ECHO@Cove')
         update.message.reply_text(
             'Registration completed! \n'
             'We hope you will have fun in this event!\n\n'
@@ -132,13 +140,18 @@ def confirmation(update: Update, _: CallbackContext):
             'We will see you on the 17th of November!',
             reply_markup=ReplyKeyboardRemove()
         )
+        if userID not in userID_registered:
+            userID_registered.append(userID)
         logger.info(f"{userID_database=}")
+        logger.info(f"{userID_registered=}")
         return ConversationHandler.END
 
     else:
+        logger.info(f'{user.first_name} did not register for ECHO@Cove')
         update.message.reply_text(
             "We hope that you will eventually join ECHO@Cove!", reply_markup=ReplyKeyboardRemove())
         logger.info(f"{userID_database=}")
+        logger.info(f"{userID_registered=}")
         return ConversationHandler.END
 
 @send_typing_action
