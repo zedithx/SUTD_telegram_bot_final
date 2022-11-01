@@ -52,9 +52,9 @@ userID_registered = []
 
 # static dictionaries to be managed
 musictheme_dict = {'1': "FEELIN' GOOD", '2': "2000s", '3': "HIPHOP"}
-spotifylink_dict = {'1': "https://open.spotify.com/playlist/6azPbOPc3UAgRFNeRa4uSY?si=c4381db8a24f4ce6&pt=f1c4059844e4d4e32fff96cf4fea6c5c",
-                    '2': "https://open.spotify.com/playlist/3getgDZOuHhjSgDjjIck7g?si=bbcde49dedba4e2e&pt=fe57b58d32be872cdfd670d7a328e74f",
-                    '3': "https://open.spotify.com/playlist/6mF2LjVSakEt0yx7807a5r?si=541bd9e4370c46a2&pt=00bf81921e3a4f4ba815aba2e8969735"}
+spotifylink_dict = {'1': "https://open.spotify.com/playlist/6azPbOPc3UAgRFNeRa4uSY?si=7147033af617480d&pt=9e017c81d123f49cc27932666107ed18",
+                    '2': "https://open.spotify.com/playlist/3getgDZOuHhjSgDjjIck7g?si=32b067fcd5a04163&pt=f79118895785d4a6b948341782d0ddfd",
+                    '3': "https://open.spotify.com/playlist/6mF2LjVSakEt0yx7807a5r?si=0875e2d92ffd4731&pt=a22244412950c76574aa675e2babd808"}
 
 def send_typing_action(func):
     """Wrapper to show that bot is typing"""
