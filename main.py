@@ -98,7 +98,7 @@ def start(update: Update, _: CallbackContext):
     sleep(3)
     reply_keyboard = [["Yes", "No"]]
     update.message.reply_text(
-        "Do you consent to the collection, use or disclosure of your telegram id only for the purpose of this event?"
+        "Do you consent to the collection, use or disclosure of your telegram id only for the purpose of this event?\n"
         "Your personal data will be deleted after the event.\n\n "
         "Type /cancel to stop talking to me.",
         reply_markup=ReplyKeyboardMarkup(
@@ -179,10 +179,10 @@ def theme(update: Update, _: CallbackContext):
     user = update.message.from_user
     logger.info(f'{user.first_name} has chosen to add songs for {musictheme_dict[f"{update.message.text}"]}')
     update.message.reply_text(
-        f"Please use this link to add songs for {musictheme_dict[f'{update.message.text}']} \n"
+        f"Please use this link to add songs for {musictheme_dict[f'{update.message.text}']}. \n"
         f"Take note that this link will only last for {(start_time + dt.timedelta(days=7) - dt.datetime.now()).days}"
-        f" more days"
-        f"{spotifylink_dict[f'{update.message.text}']}\n\n",
+        f" more days \n"
+        f"{spotifylink_dict[f'{update.message.text}']}",
         reply_markup=ReplyKeyboardRemove()
     )
     return ConversationHandler.END
