@@ -86,7 +86,7 @@ def start(update: Update, _: CallbackContext):
     sleep(3)
     bot.sendPhoto(update.message.chat_id, open("Images/ECHO_2000s.jpg", 'rb'), caption='2000s')
     sleep(3)
-    bot.sendPhoto(update.message.chat_id, open("Images/ECHO_Hiphop.jpg", 'rb'), caption='HIP HOP')
+    bot.sendPhoto(update.message.chat_id, open("Images/ECHO_Hiphop.jpeg", 'rb'), caption='HIP HOP')
     sleep(3)
     update.message.reply_text(
         "We will be giving out glowsticks based on the theme that u choose. \n\n"
