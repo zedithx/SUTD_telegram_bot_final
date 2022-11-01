@@ -1,6 +1,6 @@
-import datetime
 import logging
 import sched
+import datetime as dt
 from functools import wraps
 from threading import Thread
 from time import sleep
@@ -49,6 +49,8 @@ REGISTRATION, CONFIRMATION, THEME = range(3)
 userID_database = []
 # store chat ids of everyone who actually went through with registering
 userID_registered = []
+# store time started for spotify link
+start_time = dt.datetime.now()
 
 # static dictionaries to be managed
 musictheme_dict = {'1': "FEELIN' GOOD", '2': "2000s", '3': "HIPHOP"}
@@ -175,7 +177,9 @@ def theme(update: Update, _: CallbackContext):
     logger.info(f'{user.first_name} has chosen to add songs for {musictheme_dict[f"{update.message.text}"]}')
     update.message.reply_text(
         f"Please use this link to add songs for {musictheme_dict[f'{update.message.text}']} \n\n"
-        f"{spotifylink_dict[f'{update.message.text}']}",
+        f"{spotifylink_dict[f'{update.message.text}']}\n\n"
+        f"Take note that this link will only last for {(start_time + dt.timedelta(days=7) - dt.datetime.now()).days}"
+        f"more days",
         reply_markup=ReplyKeyboardRemove()
     )
     return ConversationHandler.END
