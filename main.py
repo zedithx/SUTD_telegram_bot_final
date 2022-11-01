@@ -176,10 +176,10 @@ def theme(update: Update, _: CallbackContext):
     user = update.message.from_user
     logger.info(f'{user.first_name} has chosen to add songs for {musictheme_dict[f"{update.message.text}"]}')
     update.message.reply_text(
-        f"Please use this link to add songs for {musictheme_dict[f'{update.message.text}']} \n\n"
-        f"{spotifylink_dict[f'{update.message.text}']}\n\n"
+        f"Please use this link to add songs for {musictheme_dict[f'{update.message.text}']} \n"
         f"Take note that this link will only last for {(start_time + dt.timedelta(days=7) - dt.datetime.now()).days}"
-        f"more days",
+        f" more days"
+        f"{spotifylink_dict[f'{update.message.text}']}\n\n",
         reply_markup=ReplyKeyboardRemove()
     )
     return ConversationHandler.END
