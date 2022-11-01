@@ -77,16 +77,16 @@ def start(update: Update, _: CallbackContext):
         userID_database.append(userID)
     logger.info(f"{user.first_name} has started the bot")
 
-    bot.sendPhoto(update.message.chat_id, open("Images/Echo_main.jpg", 'rb'), caption=
+    bot.sendPhoto(update.message.chat_id, open("Images/Echo_Telebot.jpeg", 'rb'), caption=
         "Hello. Welcome to the Echo@Cove 2022 Registration Bot \n\n"
         "Echo@Cove is an event on 17 November where we have invited DJs to mix musics with 3 different themes\n\n"
         "These themes will be...")
     sleep(3)
-    bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption="FEELIN' GOOD")
+    bot.sendPhoto(update.message.chat_id, open("Images/ECHO_FeelinGood.jpg", 'rb'), caption="FEELIN' GOOD")
     sleep(3)
-    bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='2000s')
+    bot.sendPhoto(update.message.chat_id, open("Images/ECHO_2000s.jpg", 'rb'), caption='2000s')
     sleep(3)
-    bot.sendPhoto(update.message.chat_id, open("Images/Echo_details.jpg", 'rb'), caption='HIP HOP')
+    bot.sendPhoto(update.message.chat_id, open("Images/ECHO_Hiphop.jpg", 'rb'), caption='HIP HOP')
     sleep(3)
     update.message.reply_text(
         "We will be giving out glowsticks based on the theme that u choose. \n\n"
@@ -98,7 +98,8 @@ def start(update: Update, _: CallbackContext):
     sleep(3)
     reply_keyboard = [["Yes", "No"]]
     update.message.reply_text(
-        "Do you consent to the collection, use or disclosure of your telegram id only for the purpose of this event?\n\n"
+        "Do you consent to the collection, use or disclosure of your telegram id only for the purpose of this event?"
+        "Your personal data will be deleted after the event.\n\n "
         "Type /cancel to stop talking to me.",
         reply_markup=ReplyKeyboardMarkup(
             reply_keyboard)
@@ -136,6 +137,8 @@ def confirmation(update: Update, _: CallbackContext):
         update.message.reply_text(
             'Registration completed! \n'
             'We hope you will have fun in this event!\n\n'
+            'Please take note that pictures and videos may be taken on the event day itself for '
+            'reporting and publicity purposes.\n\n'
             'You can add your favourite songs to our spotify playlist by using /song. '
             'The DJs may then play your favourite song on the day itself!\n\n'
             'Do look out for any updates nearing to the event from this telegram bot as information '
