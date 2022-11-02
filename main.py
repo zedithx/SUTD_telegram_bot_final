@@ -14,8 +14,9 @@ from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove, ChatActio
 from telegram.ext import CommandHandler, ConversationHandler, MessageHandler, \
     Updater, Filters, CallbackContext
 from telegram import __version__ as TG_VER
-
+import asyncio
 import os
+
 PORT = int(os.environ.get('PORT', '8443'))
 
 logging.basicConfig(
@@ -69,7 +70,7 @@ def send_typing_action(func):
 
 # Explains details of ECHO and ask if they would like to register
 @send_typing_action
-def start(update: Update, _: CallbackContext):
+async def start(update: Update, _: CallbackContext):
     """Starts the conversation and asks whether the user would like to register for Echo"""
     user = update.message.from_user
     userID = str(update.message.chat_id)
@@ -92,7 +93,7 @@ def start(update: Update, _: CallbackContext):
         "We will be giving out glowsticks based on the theme that u choose. \n\n"
         "The main goal of this event is to allow everyone to bond with each other based on the music theme they enjoy "
         "the most out of the 3 themes \n\n"
-        "There will also be free snacks to look forward to, but on a first come first serve basis!\n\n"
+        "There will be free snacks as well as bonding games to look forward to, but on a first come first serve basis!\n\n"
         "Come along and sign up now to socialise with more people and just have a great time overall!"
     )
     sleep(3)
@@ -107,7 +108,7 @@ def start(update: Update, _: CallbackContext):
     return REGISTRATION
 
 @send_typing_action
-def registration(update: Update, _: CallbackContext):
+async def registration(update: Update, _: CallbackContext):
     "Gives link to register"
     user = update.message.from_user
     if update.message.text.lower() == 'no':
@@ -127,7 +128,7 @@ def registration(update: Update, _: CallbackContext):
         return CONFIRMATION
 
 @send_typing_action
-def confirmation(update: Update, _: CallbackContext):
+async def confirmation(update: Update, _: CallbackContext):
     "Concludes registration"
     user = update.message.from_user
     userID = str(update.message.chat_id)
@@ -161,7 +162,7 @@ def confirmation(update: Update, _: CallbackContext):
         return ConversationHandler.END
 
 @send_typing_action
-def song(update: Update, _: CallbackContext):
+async def song(update: Update, _: CallbackContext):
     user = update.message.from_user
     logger.info(f"{user.first_name} has used the song option")
     reply_keyboard = [['1', '2', '3']]
@@ -175,7 +176,7 @@ def song(update: Update, _: CallbackContext):
     return THEME
 
 @send_typing_action
-def theme(update: Update, _: CallbackContext):
+async def theme(update: Update, _: CallbackContext):
     user = update.message.from_user
     logger.info(f'{user.first_name} has chosen to add songs for {musictheme_dict[f"{update.message.text}"]}')
     update.message.reply_text(
@@ -300,7 +301,7 @@ def theme(update: Update, _: CallbackContext):
 #         logger.info(f"{userID_database=}")
 #         return ConversationHandler.END
 @send_typing_action
-def cancel(update: Update, _: CallbackContext):
+async def cancel(update: Update, _: CallbackContext):
     """Cancels and ends the conversation."""
     userID = str(update.message.chat_id)
     user = update.message.from_user
