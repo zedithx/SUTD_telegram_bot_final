@@ -93,7 +93,9 @@ def start(update: Update, _: CallbackContext):
         "We will be giving out glowsticks based on the theme that u choose. \n\n"
         "The main goal of this event is to allow everyone to bond with each other based on the music theme they enjoy "
         "the most out of the 3 themes \n\n"
-        "There will be free snacks as well as bonding games to look forward to, but on a first come first serve basis!\n\n"
+        "There will be free drinks to look forward to, but on a first come first serve basis!\n\n"
+        "There will also be bonding games that you can play with friends as well as a photobooth to capture"
+        "memories of the event!\n\n"
         "Come along and sign up now to socialise with more people and just have a great time overall!"
     )
     sleep(3)
