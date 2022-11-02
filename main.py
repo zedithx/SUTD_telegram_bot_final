@@ -70,7 +70,7 @@ def send_typing_action(func):
 
 # Explains details of ECHO and ask if they would like to register
 @send_typing_action
-async def start(update: Update, _: CallbackContext):
+def start(update: Update, _: CallbackContext):
     """Starts the conversation and asks whether the user would like to register for Echo"""
     user = update.message.from_user
     userID = str(update.message.chat_id)
@@ -108,7 +108,7 @@ async def start(update: Update, _: CallbackContext):
     return REGISTRATION
 
 @send_typing_action
-async def registration(update: Update, _: CallbackContext):
+def registration(update: Update, _: CallbackContext):
     "Gives link to register"
     user = update.message.from_user
     if update.message.text.lower() == 'no':
@@ -128,7 +128,7 @@ async def registration(update: Update, _: CallbackContext):
         return CONFIRMATION
 
 @send_typing_action
-async def confirmation(update: Update, _: CallbackContext):
+def confirmation(update: Update, _: CallbackContext):
     "Concludes registration"
     user = update.message.from_user
     userID = str(update.message.chat_id)
@@ -162,7 +162,7 @@ async def confirmation(update: Update, _: CallbackContext):
         return ConversationHandler.END
 
 @send_typing_action
-async def song(update: Update, _: CallbackContext):
+def song(update: Update, _: CallbackContext):
     user = update.message.from_user
     logger.info(f"{user.first_name} has used the song option")
     reply_keyboard = [['1', '2', '3']]
@@ -176,7 +176,7 @@ async def song(update: Update, _: CallbackContext):
     return THEME
 
 @send_typing_action
-async def theme(update: Update, _: CallbackContext):
+def theme(update: Update, _: CallbackContext):
     user = update.message.from_user
     logger.info(f'{user.first_name} has chosen to add songs for {musictheme_dict[f"{update.message.text}"]}')
     update.message.reply_text(
@@ -301,7 +301,7 @@ async def theme(update: Update, _: CallbackContext):
 #         logger.info(f"{userID_database=}")
 #         return ConversationHandler.END
 @send_typing_action
-async def cancel(update: Update, _: CallbackContext):
+def cancel(update: Update, _: CallbackContext):
     """Cancels and ends the conversation."""
     userID = str(update.message.chat_id)
     user = update.message.from_user
@@ -327,6 +327,7 @@ if __name__ == '__main__':
             CONFIRMATION: [MessageHandler(Filters.regex("^[^/].*"), confirmation)]
         },
         fallbacks=[CommandHandler("cancel", cancel)],
+        run_async=True
     )
 
     # add songs to spotify playlist
@@ -335,12 +336,13 @@ if __name__ == '__main__':
         states={
             THEME: [MessageHandler(Filters.regex('^[1-3]$'), theme)]
         },
-        fallbacks=[CommandHandler("cancel", cancel)]
+        fallbacks=[CommandHandler("cancel", cancel)],
+        run_async = True
     )
 
     dispatcher.add_handler(start_conv_handler)
     dispatcher.add_handler(song_conv_handler)
-    dispatcher.add_handler(CommandHandler('cancel', cancel))
+    dispatcher.add_handler(CommandHandler('cancel', cancel, run_async = True))
 
     test = updater.start_webhook(listen="0.0.0.0",
                                  port=PORT,
