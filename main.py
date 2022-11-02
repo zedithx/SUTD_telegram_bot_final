@@ -339,12 +339,12 @@ if __name__ == '__main__':
             THEME: [MessageHandler(Filters.regex('^[1-3]$'), theme)]
         },
         fallbacks=[CommandHandler("cancel", cancel)],
-        run_async = True
+        run_async=True
     )
 
     dispatcher.add_handler(start_conv_handler)
     dispatcher.add_handler(song_conv_handler)
-    dispatcher.add_handler(CommandHandler('cancel', cancel, run_async = True))
+    dispatcher.add_handler(CommandHandler('cancel', cancel, run_async=True))
 
     test = updater.start_webhook(listen="0.0.0.0",
                                  port=PORT,
