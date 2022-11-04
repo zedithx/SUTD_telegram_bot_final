@@ -55,9 +55,9 @@ start_time = dt.datetime.now()
 
 # static dictionaries to be managed
 musictheme_dict = {'1': "FEELIN' GOOD", '2': "2000s", '3': "HIPHOP"}
-spotifylink_dict = {'1': "https://open.spotify.com/playlist/6azPbOPc3UAgRFNeRa4uSY?si=7147033af617480d&pt=9e017c81d123f49cc27932666107ed18",
-                    '2': "https://open.spotify.com/playlist/3getgDZOuHhjSgDjjIck7g?si=32b067fcd5a04163&pt=f79118895785d4a6b948341782d0ddfd",
-                    '3': "https://open.spotify.com/playlist/6mF2LjVSakEt0yx7807a5r?si=0875e2d92ffd4731&pt=a22244412950c76574aa675e2babd808"}
+spotifylink_dict = {'1': "https://open.spotify.com/playlist/6azPbOPc3UAgRFNeRa4uSY?si=04b7881b31884fcb&pt=72c04566e2b3fe0def2fcb650f218bf2",
+                    '2': "https://open.spotify.com/playlist/3getgDZOuHhjSgDjjIck7g?si=67e98f430df641e3&pt=632c81285fd92a8f94e6c434240dfbce",
+                    '3': "https://open.spotify.com/playlist/6mF2LjVSakEt0yx7807a5r?si=b59f6a39dbba4057&pt=acd0937fcb5ebc39dafc430856e9b277"}
 
 def send_typing_action(func):
     """Wrapper to show that bot is typing"""
